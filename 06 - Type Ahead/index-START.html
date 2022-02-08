@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+  // 数据JSON文件的URL
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+let cities = [];
+ //  fetch JSON文件，返回 promise 后 .json()解析，将数据写入 cities 数组
+fetch(endpoint)
+  .then(blob => blob.json())
+  .then(data => cities.push(...data));
+ // 查找关键字，regex 表达式匹配
+function findMatches(wordToMatch,cities) {
+  return cities.filter(place => {
+      const regex = new RegExp(wordToMatch,'gi');
+      return place.city.match(regex) || place.state.match(regex);
+  })
+}
+ //  显示匹配结果
+function displayMatches() {
+  const matchArray = findMatches(this.value,cities);
+  console.log(matchArray);
+  const html = matchArray.map(place => {
+    const regex = new RegExp(this.value,'gi');
+    const cityName = place.city.replace(regex,`<span class='hl'>${this.value}</span>`);
+    const stateName = place.state.replace(regex,`<span class='hl'>${this.value}</span>`);
+
+    return `
+      <li>
+        <span class='name'>${cityName},${stateName}</span>
+        <span class='population'> ${numberWithCommas(place.population)}</span>
+      </li>
+      `;
+  }).join(' ');
+  suggestions.innerHTML = html;
+}
+
+ // 添加每三个数字加上一个 ","
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+ // 监听事件
+searchInput .addEventListener('change',displayMatches);
+searchInput .addEventListener('keyup',displayMatches);
+
+
+</script>
+</body>
+</html>
