@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  const canvans = document.getElementById('draw');
+  const ctx = canvans.getContext('2d');
+
+  canvans.width = window.innerWidth;
+  canvans.height = window.innerHeight;
+  // 设置颜色
+  ctx.strokeStyle = '#BADA55';
+  ctx.lineJoin = 'round' //'rectangle' 矩形
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
+  // ctx.globalCompositeOperation = 'multiply';
+
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let hue = 0;
+  let direction = true;
+
+  function draw(e) {
+    // 停止绘画
+    if(!isDrawing) return;
+    
+    console.log(e);
+    ctx.strokeStyle = `hsl(${hue},100%,50%)`;
+    ctx.beginPath();
+    // 起始位置
+    ctx.moveTo(lastX,lastY);
+    // 目标移动位置
+    ctx.lineTo(e.offsetX,e.offsetY);
+    // 开始画
+    ctx.stroke();
+    [lastX,lastY] = [e.offsetX,e.offsetY];
+    // 变色
+    hue++;
+    if(hue >= 360) {
+      hue = 0;
+    }
+    //lineWidth 变大变小
+    if(ctx.lineWidth >= 500 || ctx.lineWidth <= 1) {
+      direction = !direction;    
+    }
+
+    if(direction) {
+      ctx.lineWidth++;
+    }
+    else {
+      ctx.lineWidth--;
+    }
+  }
+
+  canvans.addEventListener('mousemove',draw);
+
+  canvans.addEventListener('mousedown',(e) => {
+    isDrawing = true;
+    [lastX,lastY] = [e.offsetX,e.offsetY];
+  });
+
+  canvans.addEventListener('mouseup',() => isDrawing = false);
+  canvans.addEventListener('mouseout',() => isDrawing = false);
+
+</script>
+ 
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
+ 
