@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+    console.log('Hello');
+    // Interpolated
+    console.log('Hello ,this is a %s string !','😉');
+
+    // Styled
+    console.log('%c red text ','font-size:18px;color:red;background-color:black;');
+
+    // warning!
+    console.warn('Oh Noooo');
+    // Error :|
+    console.error('Oh Noooo');
+
+    // Info
+    console.info('Oh Noooo');
+
+    // Testing
+    // 只有前面判断为假，后面字符串才输出
+    console.assert(1===2,'That is wrong !');
+
+    // clearing
+    console.clear();
+
+    // Viewing DOM Elements
+    const p =  document.querySelector('p');
+    // 控制台输出没区别
+    console.log(p);
+    console.dir(p);
+
+    // Grouping together
+    // 划分群
+    dogs.forEach(dog => {
+      console.groupCollapsed(`${dog.name}`);
+      console.log(`${dog.name} is live ${dog.age} years`);    
+      console.groupEnd(`${dog.name}`);
+
+    });
+
+    // counting
+    console.count('count');
+    console.count('count');
+
+    // timing
+    // 计时
+    console.time('get json:');
+    fetch('https://v1.hitokoto.cn/')
+      .then(json => json.json())
+      .then(data => {
+        console.timeEnd('get json:');
+        console.log(data.hitokoto);
+      });
+
+  </script>
+</body>
+</html>
