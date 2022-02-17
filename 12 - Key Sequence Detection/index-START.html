@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+  <h3>关键字顺序检测</h3>
+  <script>
+    const pressed = [];
+    const secretCode = 'mika';
+    window.addEventListener('keyup',(e) => {
+      // console.log(e.key);
+      pressed.push(e.key);
+      // pressed 数组长度动态删除成和 secretCode 长度
+      // 没达到长度不删，达到长度后删除
+      pressed.splice(-secretCode.length-1,pressed.length - secretCode.length);
+      if(pressed.join('') == secretCode) {
+        console.log('Duang !');
+        cornify_add();
+      }
+      console.log(pressed);
+      });
+  </script>
+</body>
+</html>
