@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="body">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after { 
+    box-sizing: inherit; 
+  }
+
+  div {
+    width: 100%;
+    padding: 100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background: mistyrose;
+  }
+
+  .three {
+    background: coral;
+  }
+</style>
+
+<button></button>
+<script>
+  // 了解事件传播机制，冒泡，执行一次
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('button');
+
+  function logText(e) {
+    console.log(this.classList.value);
+    e.stopPropagation(); // 停止冒泡
+  }
+
+  document.body.addEventListener('click',logText);
+  button.addEventListener('click',() => console.log('Shit ! !'),{
+    once: true
+  });
+  divs.forEach(div => div.addEventListener('click',logText,{
+    capture: false,
+    // 点击完就会解除绑定 unbind 
+    // 等价于 div.remove('click',logText);
+    once: true
+  }));
+</script>
+</body>
+</html>
